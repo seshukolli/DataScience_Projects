@@ -1,0 +1,10 @@
+2024-11-16 12:20:15,212 - INFO - Successfully connected to RDS.
+2024-11-16 12:20:15,212 - INFO - Successfully connected to RDS.
+2024-11-16 12:20:15,294 - INFO - Table creation: successful
+2024-11-16 12:20:30,577 - INFO - Data loaded into `people1000` table successfully
+2024-11-16 12:20:30,670 - INFO - Data transformed successfully.
+2024-11-16 12:20:30,745 - INFO - Table creation: successful
+2024-11-16 12:20:45,504 - INFO - Transformed data stored in RDS successfully.
+2024-11-16 12:20:46,540 - INFO - Data uploaded to S3 bucket 'seshubucket111' as 'people1000_transformed.csv'.
+2024-11-16 12:20:46,543 - INFO - Data processing pipeline completed successfully.
+2024-11-16 12:20:46,544 - INFO - Database connection closed.
