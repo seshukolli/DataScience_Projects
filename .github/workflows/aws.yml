@@ -31,39 +31,34 @@ jobs:
         # Ensure Python and pip are installed
         sudo yum install python3 -y
         sudo yum install python3-pip -y
-        
+        sudo yum install git -y
+
         # Navigate to the project directory
         cd DataScience_Projects/AWS_Django_Application
         
         # Pull the latest code
         git pull origin main
-        
+
         # Create or activate the virtual environment
         if [ ! -d "venv" ]; then
           python3 -m venv venv
         fi
         source venv/bin/activate
-        
+
         # Install dependencies
         pip install --upgrade pip
+        pip install -r requirements.txt
+        
+        # Verify installations
         python --version
         pip --version
-        pip install django
         django-admin --version
-        sudo yum install git -y
         git --version
-        git clone https://github.com/seshukolli/DataScience_Projects.git
-        cd DataScience_Projects
-        cd AWS_Django_Application
-        git pull origin main
-        python manage.py runserver 0.0.0.0:8000
-        
-        
         
         # Kill any running instance of the server
         pkill -f 'python manage.py runserver' || true
-        
-        # Start the Django development server (for production, consider Gunicorn)
+
+        # Start the Django development server in the background
         python manage.py runserver 0.0.0.0:8000 &
         
         EOF
