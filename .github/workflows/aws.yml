@@ -46,6 +46,18 @@ jobs:
         
         # Install dependencies
         pip install --upgrade pip
+        python --version
+        pip --version
+        pip install django
+        django-admin --version
+        sudo yum install git -y
+        git --version
+        git clone https://github.com/seshukolli/DataScience_Projects.git
+        cd DataScience_Projects
+        cd AWS_Django_Application
+        git pull origin main
+        python manage.py runserver 0.0.0.0:8000
+        
         
         
         # Kill any running instance of the server
