@@ -1,0 +1,50 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main  # Trigger on push to the main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+    - name: Deploy to EC2
+      env:
+        SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+        EC2_USER: ${{ secrets.EC2_USER }}
+        EC2_HOST: ${{ secrets.EC2_HOST }}
+      run: |
+        ssh -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST << 'EOF'
+        # Navigate to the project directory on EC2
+        cd DataScience_Projects
+        cd AWS_Django_Application
+        
+        # Pull the latest code
+        git pull origin main
+        
+        # Activate your environment (if any)
+        source venv/bin/activate
+        
+        # Install dependencies (if applicable)
+        pip install -r requirements.txt
+        
+        # Kill any running instance of the server (replace with your server's process name)
+        pkill -f 'python manage.py runserver' || true
+        
+        # Start the server (example using Django development server)
+        python manage.py runserver 0.0.0.0:8000 &
+        
+        # Optionally restart the server using systemctl if using a service (example with Gunicorn)
+        # sudo systemctl restart my-web-service
+        
+        EOF
