@@ -18,7 +18,6 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
-
     - name: Deploy to EC2
       env:
         SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
@@ -26,26 +25,33 @@ jobs:
         EC2_HOST: ${{ secrets.EC2_HOST }}
       run: |
         ssh -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST << 'EOF'
-        # Navigate to the project directory on EC2
-        cd DataScience_Projects
-        cd AWS_Django_Application
+        # Update all packages
+        sudo yum update -y
+        
+        # Ensure Python and pip are installed
+        sudo yum install python3 -y
+        sudo yum install python3-pip -y
+        
+        # Navigate to the project directory
+        cd DataScience_Projects/AWS_Django_Application
         
         # Pull the latest code
         git pull origin main
         
-        # Activate your environment (if any)
+        # Create or activate the virtual environment
+        if [ ! -d "venv" ]; then
+          python3 -m venv venv
+        fi
         source venv/bin/activate
         
-        # Install dependencies (if applicable)
+        # Install dependencies
+        pip install --upgrade pip
         pip install -r requirements.txt
         
-        # Kill any running instance of the server (replace with your server's process name)
+        # Kill any running instance of the server
         pkill -f 'python manage.py runserver' || true
         
-        # Start the server (example using Django development server)
+        # Start the Django development server (for production, consider Gunicorn)
         python manage.py runserver 0.0.0.0:8000 &
-        
-        # Optionally restart the server using systemctl if using a service (example with Gunicorn)
-        # sudo systemctl restart my-web-service
         
         EOF
