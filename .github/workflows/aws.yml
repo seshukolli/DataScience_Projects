@@ -18,6 +18,7 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
+
     - name: Deploy to EC2
       env:
         SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
