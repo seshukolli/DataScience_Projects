@@ -46,7 +46,7 @@ jobs:
         
         # Install dependencies
         pip install --upgrade pip
-        pip install -r requirements.txt
+        
         
         # Kill any running instance of the server
         pkill -f 'python manage.py runserver' || true
