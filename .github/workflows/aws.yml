@@ -25,49 +25,49 @@ jobs:
       run: |
         ssh -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST << 'EOF'
         # Update system packages
-        echo "Updating packages..."
-        sudo yum update -y
+        #echo "Updating packages..."
+        #sudo yum update -y
 
         # Install required tools if not already installed
-        echo "Installing necessary tools..."
-        sudo yum install -y python3 python3-pip git
+        #echo "Installing necessary tools..."
+        #sudo yum install -y python3 python3-pip git
 
         # Navigate to the project directory
-        echo "Navigating to the project directory..."
-        cd DataScience_Projects/AWS_Django_Application
+        #echo "Navigating to the project directory..."
+        #cd DataScience_Projects/AWS_Django_Application
 
         # Pull the latest changes from the repository
-        echo "Pulling the latest changes..."
-        git pull origin main
+        #echo "Pulling the latest changes..."
+        #git pull origin main
 
         # Create a virtual environment if it doesn't exist
-        if [ ! -d "venv" ]; then
-          echo "Creating a virtual environment..."
-          python3 -m venv venv
-        fi
+        # if [ ! -d "venv" ]; then
+        #   echo "Creating a virtual environment..."
+        #   python3 -m venv venv
+        # fi
 
-        # Activate the virtual environment
-        echo "Activating the virtual environment..."
-        source venv/bin/activate
+        # # Activate the virtual environment
+        # echo "Activating the virtual environment..."
+        # source venv/bin/activate
 
-        # Upgrade pip and install dependencies
-        echo "Installing dependencies from requirements.txt..."
-        pip install --upgrade pip
-        pip install -r requirements.txt
+        # # Upgrade pip and install dependencies
+        # echo "Installing dependencies from requirements.txt..."
+        # pip install --upgrade pip
+        # #pip install -r requirements.txt
 
-        # Verify installations
-        echo "Verifying installations..."
-        python --version
-        pip --version
-        django-admin --version
+        # # Verify installations
+        # echo "Verifying installations..."
+        # python --version
+        # pip --version
+        # django-admin --version
 
-        # Kill any running instance of the Django server
-        echo "Stopping any running Django server..."
-        pkill -f 'python manage.py runserver' || true
+        # # Kill any running instance of the Django server
+        # echo "Stopping any running Django server..."
+        # pkill -f 'python manage.py runserver' || true
 
-        # Run database migrations
-        echo "Running Django migrations..."
-        python manage.py migrate
+        # # Run database migrations
+        # echo "Running Django migrations..."
+        # python manage.py migrate
 
         # Start the Django development server
         echo "Starting the Django development server..."
