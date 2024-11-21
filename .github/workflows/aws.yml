@@ -1,0 +1,64 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main  # Trigger on push to the main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+    - name: Deploy to EC2
+      env:
+        SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+        EC2_USER: ${{ secrets.EC2_USER }}
+        EC2_HOST: ${{ secrets.EC2_HOST }}
+      run: |
+        ssh -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST << 'EOF'
+        # Update all packages
+        sudo yum update -y
+        
+        # Ensure Python and pip are installed
+        sudo yum install python3 -y
+        sudo yum install python3-pip -y
+        sudo yum install git -y
+
+        # Navigate to the project directory
+        cd DataScience_Projects/AWS_Django_Application
+        
+        # Pull the latest code
+        git pull origin main
+
+        # Create or activate the virtual environment
+        if [ ! -d "venv" ]; then
+          python3 -m venv venv
+        fi
+        source venv/bin/activate
+
+        # Install dependencies
+        pip install --upgrade pip
+        pip install -r requirements.txt
+        
+        # Verify installations
+        python --version
+        pip --version
+        django-admin --version
+        git --version
+        
+        # Kill any running instance of the server
+        pkill -f 'python manage.py runserver' || true
+
+        # Start the Django development server in the background
+        python manage.py runserver 0.0.0.0:8000 &
+        
+        EOF
