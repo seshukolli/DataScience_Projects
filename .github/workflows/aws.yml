@@ -70,7 +70,12 @@ jobs:
         # python manage.py migrate
 
         # Start the Django development server
+        source venv/bin/activate
+        cd DataScience_Projects
+        cd AWS_Django_Application
+        pip install -r requirements.txt
         echo "Starting the Django development server..."
-        nohup python manage.py runserver 0.0.0.0:8000 &
+        pkill -f runserver
+        nohup python manage.py runserver 0.0.0.0:8000 > server.log 2>&1 &
 
         EOF
